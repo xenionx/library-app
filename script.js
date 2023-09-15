@@ -18,7 +18,9 @@ function Book(name, author, pages, isRead){
 
 
 function addBookToLibrary(bookName){
+    bookName.bookId = bookNumber
     myLibrary.push(bookName);
+    bookNumber++;
 }
 
 function createCard(){
@@ -28,9 +30,7 @@ function createCard(){
     const displayPages = document.createElement('p');
     const readButton = document.createElement('button');
     const removeButton = document.createElement('button');
-
     myLibrary.forEach((book)=>{
-        book.bookId = bookNumber;
         displayTitle.textContent = book.name;
         displayAuthor.textContent = book.author;
         displayPages.textContent = book.pages;
@@ -49,31 +49,22 @@ function createCard(){
         cardContainer.appendChild(newCard);
 
         removeButton.addEventListener('click', ()=>{
-            const bookIdToRemove = parseInt(removeButton.getAttribute("data-book-number"));
-            const indexToRemove = myLibrary.findIndex(book => book.bookId === bookIdToRemove);
-
-            if (indexToRemove !== -1) {
-                 myLibrary.splice(indexToRemove, 1);
-                 cardContainer.removeChild(newCard);
-            }
-        
+                myLibrary.splice(book.bookId, 1);
+                cardContainer.removeChild(newCard);
+                bookNumber--;
+                console.table(myLibrary);
+            })
         })
-    })
-    bookNumber++;
 }
-
-
 
 addButton.addEventListener('click', () => {
     formDialog.showModal();
 })
-
 
 submitButton.addEventListener('click', () => {
     let isRead = hasRead.checked ? "Read" : "Not Read";
     const bookName = new Book(bookTitle.value, bookAuthor.value, bookPages.value, isRead);
     addBookToLibrary(bookName);
     createCard();
-
 })
 
