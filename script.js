@@ -20,6 +20,10 @@ function Book(name, author, pages, isRead){
 }
 
 
+Book.prototype.toggleReadStatus = function(){
+    this.isRead = !this.isRead;
+}
+
 function addBookToLibrary(bookName){
     bookName.bookId = bookNumber
     myLibrary.push(bookName);
@@ -41,8 +45,14 @@ function createCard(bookId) {
     displayAuthor.textContent = book.author;
     displayPages.textContent = book.pages;
 
-    readButton.setAttribute("class", book.isRead === "Read" ? "is-read" : "not-read");
-    readButton.textContent = book.isRead === "Read" ? "Read" : "Not Read";
+    if(book.isRead){
+        readButton.textContent = "Read";
+        readButton.classList.toggle("is-read");
+    }else{
+        readButton.textContent = "Not Read";
+        readButton.classList.toggle("not-read");
+    }
+    
     readButton.setAttribute("data-book-number", book.bookId);
     removeButton.textContent = "Remove";
     removeButton.setAttribute("data-book-number", book.bookId);
@@ -59,20 +69,31 @@ function createCard(bookId) {
     removeButton.addEventListener('click', () => {
         myLibrary.splice(myLibrary.indexOf(book), 1);
         cardContainer.removeChild(newCard);
-        bookNumber--;
+        for (let i = 0; i < myLibrary.length; i++) {
+            myLibrary[i].bookId = i;
+        }
+        bookNumber = myLibrary.length;
         console.table(myLibrary);
+
+
     });
 
     readButton.addEventListener('click', () => {
-        if(readButton.getAttribute("class") === "is-read"){
-            readButton.setAttribute("class", "not-read");
-            readButton.textContent = "Not Read";
+        const bookId = readButton.getAttribute('data-book-number');
+        const book = myLibrary.find(book => book.bookId == bookId);
+
+        if(book){
+            book.toggleReadStatus();
+            if(book.isRead){
+                readButton.textContent = "Read";
+                readButton.classList.toggle("is-read");
+            }else{
+                readButton.textContent = "Not Read";
+                readButton.classList.toggle("not-read");
+            }
         }
-        else{
-            readButton.setAttribute("class", "is-read");
-            readButton.textContent = "Read";
-        }
-    })
+    
+})
 
     
 
@@ -86,15 +107,16 @@ submitButton.addEventListener('click', () => {
     else{
         event.preventDefault();
         formDialog.close();
-        let isRead = hasRead.checked ? "Read" : "Not Read";
+        let isRead = hasRead.checked;
         const bookName = new Book(bookTitle.value, bookAuthor.value, bookPages.value, isRead);
         bookTitle.value = "";
         bookAuthor.value = "";
         bookPages.value = "";
-        isRead = "";
+        hasRead.checked ? hasRead.checked = false : null;
+        isRead = false;
         addBookToLibrary(bookName);
         createCard(bookName.bookId);
-        hasRead.checked ? hasRead.checked = false : null;
+
     }
 })
 addButton.addEventListener('click', () => {
