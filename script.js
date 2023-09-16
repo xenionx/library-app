@@ -1,3 +1,4 @@
+
 const addButton = document.querySelector('.add');
 const formDialog = document.querySelector('.form-dialog');
 const bookTitle = document.querySelector('#title');
@@ -11,14 +12,12 @@ const myLibrary = [];
 const bookContainer = [];
 let bookNumber = 0;
 
-
 function Book(name, author, pages, isRead){
     this.name = name;
     this.author = author;
     this.pages = pages;
     this.isRead = isRead;
 }
-
 
 Book.prototype.toggleReadStatus = function(){
     this.isRead = !this.isRead;
@@ -73,9 +72,6 @@ function createCard(bookId) {
             myLibrary[i].bookId = i;
         }
         bookNumber = myLibrary.length;
-        console.table(myLibrary);
-
-
     });
 
     readButton.addEventListener('click', () => {
@@ -94,9 +90,6 @@ function createCard(bookId) {
         }
     
 })
-
-    
-
  
 }
 
