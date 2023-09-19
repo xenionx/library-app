@@ -12,16 +12,22 @@ const myLibrary = [];
 const bookContainer = [];
 let bookNumber = 0;
 
-function Book(name, author, pages, isRead){
-    this.name = name;
-    this.author = author;
-    this.pages = pages;
-    this.isRead = isRead;
+
+class Book {
+    constructor(name, author, pages, isRead){
+        this.name = name;
+        this.author = author;
+        this.pages = pages;
+        this.isRead = isRead;
+    }
+
+    toggleReadStatus(){
+        this.isRead = !this.isRead;
+    }
 }
 
-Book.prototype.toggleReadStatus = function(){
-    this.isRead = !this.isRead;
-}
+
+
 
 function addBookToLibrary(bookName){
     bookName.bookId = bookNumber
@@ -39,7 +45,6 @@ function createCard(bookId) {
     const removeButton = document.createElement('button');
     const book = myLibrary.find(book => book.bookId === bookId);
 
-    
     displayTitle.textContent = book.name;
     displayAuthor.textContent = book.author;
     displayPages.textContent = book.pages;
@@ -114,5 +119,4 @@ submitButton.addEventListener('click', () => {
 })
 addButton.addEventListener('click', () => {
     formDialog.showModal();
-
 })
